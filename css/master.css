@@ -1,0 +1,7 @@
+.bienvenida {
+    display: none;
+    position: absolute;
+    top: 38vh;
+    left: 38vw;
+    text-align: center;
+}
