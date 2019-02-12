@@ -30,10 +30,6 @@ nav li a:hover {
     display: none;
 }
 
-img {
-    display: block;
-}
-
 #img {
     top: 0;
     position: fixed;
@@ -52,8 +48,6 @@ img {
 
 .pre-form {
     position: absolute;
-    top: 38vh;
-    left: 33vw;
     padding: 10px 10px;
     background-color: yellow;
     border: 3px solid gray;
@@ -65,4 +59,10 @@ img {
     align-items: center;
     left: 100px;
     position: relative;
+}
+
+.img-insitu {
+    width: 200px;
+    height: 200px;
+    object-fit: scale-down;
 }
