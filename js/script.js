@@ -2,9 +2,10 @@ $(function(){
     bienvenida();
 
     $('#img').on('click', desplegable);
-    $('#titulo').on('click', setTitulo);
+    $('#articulo').on('click', setArticulo);
     $('#imagen').on('click', setImagen);
     $('#alertBoton').on('click', setAlert);
+    $('#tabla').on('click', setTabla);
 
 });
 
@@ -53,7 +54,7 @@ function setAlert(){
                     </button>
                 </div>
             `)
-            .on('click', (e)=>{
+            .on('click', "button", (e)=>{
                 alert($(e.target).attr('data'));
             })
             .draggable()
@@ -71,7 +72,7 @@ function setAlert(){
 
 }
 
-function setTitulo() {
+function setArticulo() {
     $(`<form class="pre-form" name="titulo">
         <p>
             <label for="tamaño">Tamaño: </label>
@@ -179,4 +180,87 @@ function setImagen() {
         $(this).parent().parent().remove();
     });
 
+}
+
+function setTabla() {
+    $('<form>')
+    .addClass('pre-form')
+    .append(
+        $('<p>')
+        .append($('<label>').attr('for', 'setFila'))
+        .html('Numero de filas:')
+        .append(
+            $('<input>')
+            .attr({
+                id: 'setFila',
+                type: 'number',
+            })
+        )
+    )
+    .append(
+        $('<p>')
+        .append($('<label>')
+        .attr('for', 'setColumna'))
+        .html('Numero de columnas:')
+        .append(
+            $('<input>')
+            .attr({
+                id: 'setColumna',
+                type: 'number',
+            })
+        )
+    )
+    .append(
+        $('<p>')
+        .append(
+            $('<input>')
+            .attr({
+                type: 'submit',
+                value: 'Confirmar',
+            })
+            .on('click', (e) => {
+                //TODO
+            })
+        )
+        .append(
+            $('<input>')
+            .attr({
+                type: 'submit',
+                value: 'Cancelar',
+            })
+            .on('click', (e) => {
+                e.preventDefault();
+                $(e.target).parent().parent().remove();
+            })
+        )
+    )
+    .appendTo('.principal')
+    .centrar();
+
+    // var $table = $('<table>');
+    // var $thead = $('<thead>');
+    // var $tbody = $('<tbody>');
+    //
+    // for (let i = 0; i < num; i++) {
+    //     $thead.append('<th>');
+    // }
+    //
+    // for (let i = 0; i < num*2; i++) {
+    //     var $tr = $('<tr>');
+    //     for (let i = 0; i < num; i++) {
+    //         $tr.append(
+    //             $('<td>')
+    //             .on('click', ()=>{
+    //                 var str = prompt('Introduzca lo que desea guardar en la celda seleccionada.');
+    //                 $(this).html(str);
+    //             })
+    //         );
+    //     }
+    //     $tbody.append($tr);
+    // }
+    //
+    // $table
+    // .append($thead)
+    // .append($tbody)
+    // .appendTo('.principal');
 }
