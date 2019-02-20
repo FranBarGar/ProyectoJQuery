@@ -26,6 +26,9 @@ function desplegable() {
     }
 }
 
+/**
+ * TODO
+ */
 function setAlert(){
     $(`<form class="pre-form" name="alert">
     <p>
@@ -72,64 +75,98 @@ function setAlert(){
 
     }
 
+/**
+ * Muestra un formulario que pide el tamaño del titulo, el titulo en sí y
+ * el contenido del articulo, pudiendo dejar vacio uno de los dos.
+ */
 function setArticulo() {
-        $(`<form class="pre-form" name="titulo">
-        <p>
-        <label for="tamaño">Tamaño: </label>
-        <select id="tamaño">
-        <option value="h1">H1</option>
-        <option value="h2">H2</option>
-        <option value="h3">H3</option>
-        </select>
-        </p>
-        <p>
-        <label for="contenido">Titulo: </label>
-        <input id="contenido" type="text">
-        </p>
-        <p>
-        <input id="confirmar" type="submit" value="Confirmar">
-        <input id="cancelar" type="submit" value="Cancelar">
-        </p>
-        </form>`)
-        .appendTo('.principal')
-        .centrar();
-
-        $('#confirmar').on('click', function (e) {
-            e.preventDefault();
-            if ($('#contenido').val()) {
-                $(`
-                    <div class="draggable">
-                    <${$('#tamaño :selected').val()}>
-                    ${$('#contenido').val()}
-                    </${$('#tamaño:selected').val()}>
-                    </div>
-                    `)
-                    .draggable()
-                    .appendTo('.principal');
-                    $(this).parent().parent().remove();
-                } else {
-                    alert('Rellene el campo de "Titulo" o pulse "Cancelar" para salir.');
-                }
-            });
-
-            $('#cancelar').on('click', function (e) {
+    $('<form>')
+    .attr('class', 'pre-form')
+    .append(
+        $('<p>')
+        .append($('<label>').attr('for', 'setTamaño').html('Tamaño: '))
+        .append(
+            $('<select>')
+            .attr('id', 'setTamaño')
+            .append($('<option>').attr('value', 'h1').html('H1'))
+            .append($('<option>').attr('value', 'h2').html('H2'))
+            .append($('<option>').attr('value', 'h3').html('H3'))
+        )
+    )
+    .append(
+        $('<p>')
+        .append($('<label>').attr('for', 'setTitulo').html('Titulo: '))
+        .append(
+            $('<input>')
+            .attr({
+                id: 'setTitulo',
+                type: 'text'
+            })
+        )
+    )
+    .append(
+        $('<p>')
+        .append($('<label>').attr('for', 'setContenido').html('Contenido: '))
+        .append(
+            $('<input>')
+            .attr({
+                id: 'setContenido',
+                type: 'text'
+            })
+        )
+    )
+    .append(
+        $('<p>')
+        .append(
+            $('<input>')
+            .attr({
+                type: 'submit',
+                value: 'Confirmar',
+            })
+            .on('click', (e) => {
                 e.preventDefault();
-                $(this).parent().parent().remove();
-            });
 
-        }
+                var titulo = $('#setTitulo').val();
+                var contenido = $('#setContenido').val();
+                if (titulo || contenido) {
+                    var $div = $('<div>').addClass('draggable');
 
+                    if (titulo) {
+                        $div.append(
+                            $(`<${$('#setTamaño :selected').val()}>`)
+                            .html(titulo)
+                        );
+                    }
+
+                    if (contenido) {
+                        $div.append($('<p>').html(contenido));
+                    }
+
+                    $div.draggable().appendTo('.principal');
+
+                    $(e.target).parent().parent().remove();
+                } else {
+                    alert('Rellene el campo de "Titulo" o el de "Contenido" o pulse "Cancelar" para salir.');
+                }
+            })
+        )
+        .append(botonCancelar())
+    )
+    .appendTo('.principal')
+    .centrar();
+}
+
+/**
+ * Muestra un formulario que permite al usuario subir una imagen en su sistema de ficheros,
+ * si la imagen es correcta la muestra.
+ */
 function setImagen() {
     var src;
 
     $('<form>').attr('class', "pre-form")
     .append(
         $('<p>')
-        .append(
-            $('<label>')
-            .attr('for', 'setImagen')
-            .html('Imagen: ')
-        )
+        .append($('<label>').attr('for', 'setImagen').html('Imagen: '))
         .append(
             $('<input>')
             .attr({
@@ -163,11 +200,7 @@ function setImagen() {
     )
     .append(
         $('<p>')
-        .append(
-            $('<label>')
-            .attr('for', 'setContenido')
-            .html('Pié de imagen: ')
-        )
+        .append($('<label>').attr('for', 'setContenido').html('Pié de imagen: '))
         .append(
             $('<input>')
             .attr({
@@ -175,7 +208,8 @@ function setImagen() {
                 type: 'text',
             })
         )
-    ).append(
+    )
+    .append(
         $('<p>')
         .append(
             $('<input>')
@@ -185,22 +219,33 @@ function setImagen() {
             })
             .on('click', (e) => {
                 e.preventDefault();
-                var img = '<div class="draggable">';
+                var $div = $('<div>').addClass('draggable');
 
                 if (src) {
-                    img += `<img src="${src}">`
+                    $div.append(
+                        $('<img>')
+                        .addClass('img-insitu')
+                        .attr('src', src)
+                    )
                 } else {
-                    img += '<img class="img-insitu" src="src/photos/eduardo.png">';
+                    $div.append(
+                        $('<img>')
+                        .addClass('img-insitu')
+                        .attr('src', 'src/photos/eduardo.png')
+                    )
                 }
 
-
-                if ($('#contenido').val()) {
-                    img+=`<figcaption>${$('#contenido').val()}</figcaption>`;
+                if ($('#setContenido').val()) {
+                    $div.append(
+                        $('<figcaption>')
+                        .html($('#setContenido').val())
+                    )
                 }
-                $(img+'</div>')
+
+                $div
                 .draggable()
                 .appendTo('.principal');
-                $(this).parent().parent().remove();
+                $(e.target).parent().parent().remove();
             })
         )
         .append(botonCancelar())
@@ -255,14 +300,13 @@ function setTabla() {
             })
             .on('click', (e) => {
                 e.preventDefault();
-                if (filas >=1 && columnas>=1) {
-                    generarTabla(
-                        $('#setFila').val(),
-                        $('#setColumna').val()
-                    );
+                var filas = $('#setFila').val();
+                var columnas = $('#setColumna').val();
+                if (filas >=1 && columnas>=1 && filas <=20 && columnas<=20) {
+                    generarTabla(filas, columnas);
                     $(e.target).parent().parent().remove();
                 } else {
-                    alert('Introduzca ambos numeros positivos y enteros mayores que 1.')
+                    alert('Introduzca ambos numeros positivos y enteros mayores que 1 y menores que 20.')
                 }
             })
         )
@@ -283,26 +327,20 @@ function setTabla() {
         var $tbody = $('<tbody>');
 
         for (let i = 0; i < columnas; i++) {
-            $thead.append(
-                $('<th>')
-                .on('click', setContenido)
-            );
+            $thead.append($('<th>').on('click', setContenido));
         }
 
         for (let i = 0; i < filas-1; i++) {
             var $tr = $('<tr>');
             for (let i = 0; i < columnas; i++) {
-                $tr.append(
-                    $('<td>')
-                    .on('click', setContenido)
-                );
+                $tr.append($('<td>').on('click', setContenido));
             }
             $tbody.append($tr);
         }
 
-        $table
-        .append($thead)
-        .append($tbody)
+        $('<div>')
+        .addClass('draggable')
+        .append($table.append($thead).append($tbody))
         .draggable()
         .appendTo('.principal');
 
