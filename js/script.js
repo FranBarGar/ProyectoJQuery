@@ -1,18 +1,89 @@
 $(function(){
     bienvenida();
-
-    $('#img').on('click', desplegable);
-    $('#articulo').on('click', setArticulo);
-    $('#imagen').on('click', setImagen);
-    $('#alertBoton').on('click', setAlert);
-    $('#tabla').on('click', setTabla);
-
 });
 
 function bienvenida() {
     setTimeout(function(){
-        $('.bienvenida').parpadea();
-        $('#img').show(4000);
+        $('<div>')
+        .addClass('bienvenida')
+        .append($('<h1>').html('Proyecto JQuery DIW'))
+        .append($('<h2>').html('por: Francisco Barba García'))
+        .appendTo('body')
+        .parpadea();
+
+        $('<nav>')
+        .append(
+            $('<img>')
+            .attr({
+                src: 'src/cerrado.jpg',
+                alt: 'Imagen no encontrada'
+            })
+            .css({
+                top: 0,
+                position: 'fixed',
+                display: 'none',
+                width: '50px',
+                height: '50px',
+            })
+            .on('click', desplegable)
+            .fadeIn(6000)
+        )
+        .append(
+            $('<ul>')
+            .css({
+                top: '50px',
+                display: 'none'
+            })
+            .attr('id', 'nav')
+            .append(
+                $('<li>')
+                .append(
+                    $('<a>')
+                    .html('Articulo')
+                    .on('click', setArticulo)
+                )
+            )
+            .append(
+                $('<li>')
+                .append(
+                    $('<a>')
+                    .html('Imagen')
+                    .on('click', setImagen)
+                )
+            )
+            .append(
+                $('<li>')
+                .append(
+                    $('<a>')
+                    .html('Boton con alert')
+                    .on('click', setAlert)
+                )
+            )
+            .append(
+                $('<li>')
+                .append(
+                    $('<a>')
+                    .html('Tabla')
+                    .on('click', setTabla)
+                )
+            )
+            .append(
+                $('<li>')
+                .append(
+                    $('<a>')
+                    .attr({
+                        id: 'formulario',
+                        href: '#'
+                    })
+                    .html('Formulario')
+                )
+            )
+        )
+        .appendTo('body');
+
+        $('<div>')
+        .addClass('principal')
+        .appendTo('body');
     }, 2000);
 }
 
@@ -27,53 +98,78 @@ function desplegable() {
 }
 
 /**
- * TODO
+ * Muestra un formulario que pide el titulo del boton y
+ * el contenido del alert, no pudiendo dejar vacio ninguno de los dos.
  */
 function setAlert(){
-    $(`<form class="pre-form" name="alert">
-    <p>
-    <label for="setTitulo">Titulo del boton: </label>
-    <input id="setTitulo" type="text">
-    </p>
-    <p>
-    <label for="contenido">Contenido del alert: </label>
-    <input id="contenido" type="text">
-    </p>
-    <p>
-    <input id="confirmar" type="submit" value="Confirmar">
-    <input id="cancelar" type="submit" value="Cancelar">
-    </p>
-    </form>`)
+    $('<form>')
+    .addClass('pre-form')
+    .append(
+        $('<p>')
+        .append(
+            $('<label>')
+            .attr('for', 'setTitulo')
+            .html('Titulo del boton: ')
+        )
+        .append(
+            $('<input>')
+            .attr({
+                id: 'setTitulo',
+                type: 'text',
+            })
+        )
+    )
+    .append(
+        $('<p>')
+        .append(
+            $('<label>')
+            .attr('for', 'setContenido')
+            .html('Contenido del alert: ')
+        )
+        .append(
+            $('<input>')
+            .attr({
+                id: 'setContenido',
+                type: 'text',
+            })
+        )
+    )
+    .append(
+        $('<p>')
+        .append(
+            $('<input>')
+            .attr({
+                type: 'submit',
+                value: 'Confirmar',
+            })
+            .on('click', (e) => {
+                e.preventDefault();
+                var contenido = $('#setContenido').val();
+                var titulo = $('#setTitulo').val();
+                if (titulo && contenido) {
+                    $('<div>')
+                    .addClass('draggable')
+                    .append(
+                        $('<button>')
+                        .html(titulo)
+                        .data('data', contenido)
+                        .on('click', (e)=>{
+                            alert($(e.target).data('data'));
+                        })
+                    )
+                    .draggable()
+                    .appendTo('.principal');
+                    $(e.target).parent().parent().remove();
+                } else {
+                    alert('Rellene el campo de "Titulo" y "Contenido" o pulse "Cancelar" para salir.');
+                }
+            })
+        )
+        .append(botonCancelar())
+    )
     .appendTo('.principal')
     .centrar();
-
-    $('#confirmar').on('click', function (e) {
-        e.preventDefault();
-        if ($('#contenido').val()) {
-            $(`
-                <div class="draggable">
-                <button data="${$('#contenido').val()}">
-                ${$('#setTitulo').val()}
-                </button>
-                </div>
-                `)
-                .on('click', "button", (e)=>{
-                    alert($(e.target).attr('data'));
-                })
-                .draggable()
-                .appendTo('.principal');
-                $(this).parent().parent().remove();
-            } else {
-                alert('Rellene el campo de "Titulo" o pulse "Cancelar" para salir.');
-            }
-        });
-
-        $('#cancelar').on('click', function (e) {
-            e.preventDefault();
-            $(this).parent().parent().remove();
-        });
-
-    }
+}
 
 /**
  * Muestra un formulario que pide el tamaño del titulo, el titulo en sí y
