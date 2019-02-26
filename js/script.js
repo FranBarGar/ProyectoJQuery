@@ -5,6 +5,9 @@ $(function(){
 function bienvenida() {
     setTimeout(function(){
         $('<div>')
+        .css({
+            'background-color': '#f1f1f1',
+        })
         .addClass('bienvenida')
         .append($('<h1>').html('Proyecto JQuery DIW'))
         .append($('<h2>').html('por: Francisco Barba García'))
@@ -20,7 +23,7 @@ function bienvenida() {
             })
             .css({
                 top: 0,
-                position: 'fixed',
+                position: 'relative',
                 display: 'none',
                 width: '50px',
                 height: '50px',
@@ -32,7 +35,8 @@ function bienvenida() {
             $('<ul>')
             .css({
                 top: '50px',
-                display: 'none'
+                display: 'none',
+                'background-color': '#f1f1f1',
             })
             .attr('id', 'nav')
             .append(
@@ -79,7 +83,9 @@ function bienvenida() {
                 )
             )
         )
+        .draggable()
         .appendTo('body');
+
 
         $('<div>')
         .addClass('principal')
