@@ -2,9 +2,13 @@ $(function(){
     bienvenida();
 });
 
+/**
+ * Muestra la bienvenida a el Proyecto de DIW de Francisco Barba García.
+ */
 function bienvenida() {
     setTimeout(function(){
         $('<div>')
+        .attr('id', 'inicio')
         .css({
             'background-color': '#f1f1f1',
         })
@@ -29,7 +33,9 @@ function bienvenida() {
                 height: '50px',
             })
             .on('click', desplegable)
-            .fadeIn(6000)
+            .fadeIn(6000, () => {
+                $('#inicio').remove();
+            })
         )
         .append(
             $('<ul>')
@@ -93,6 +99,9 @@ function bienvenida() {
     }, 2000);
 }
 
+/**
+ * Se encarga de cambiar entre vista preliminar y vista diseño.
+ */
 function desplegable() {
     if ($(this).attr("src")=="src/abierto.png") {
         $('#nav').css("display", "none");
@@ -110,71 +119,38 @@ function desplegable() {
 function setAlert(){
     $('<form>')
     .addClass('pre-form')
-    .append(
-        $('<p>')
-        .append(
-            $('<label>')
-            .attr('for', 'setTitulo')
-            .html('Titulo del boton: ')
-        )
-        .append(
-            $('<input>')
-            .attr({
-                id: 'setTitulo',
-                type: 'text',
-            })
-        )
-    )
-    .append(
-        $('<p>')
-        .append(
-            $('<label>')
-            .attr('for', 'setContenido')
-            .html('Contenido del alert: ')
-        )
-        .append(
-            $('<input>')
-            .attr({
-                id: 'setContenido',
-                type: 'text',
-            })
-        )
-    )
-    .append(
-        $('<p>')
-        .append(
-            $('<input>')
-            .attr({
-                type: 'submit',
-                value: 'Confirmar',
-            })
-            .on('click', (e) => {
-                e.preventDefault();
-                var contenido = $('#setContenido').val();
-                var titulo = $('#setTitulo').val();
-                if (titulo && contenido) {
-                    $('<div>')
-                    .addClass('draggable')
-                    .append(
-                        $('<button>')
-                        .html(titulo)
-                        .data('data', contenido)
-                        .on('click', (e)=>{
-                            alert($(e.target).data('data'));
-                        })
-                    )
-                    .draggable()
-                    .appendTo('.principal');
-                    $(e.target).parent().parent().remove();
-                } else {
-                    alert('Rellene el campo de "Titulo" y "Contenido" o pulse "Cancelar" para salir.');
-                }
-            })
-        )
-        .append(botonCancelar())
-    )
+    .append(inputTitulo())
+    .append(inputContenido())
+    .append(setBotones(click))
     .appendTo('.principal')
     .centrar();
+
+    /**
+     * Funcion que realiza la craeción del alert.
+     * @param  {Event} e Evento que ha disparado esta accion.
+     */
+    function click(e) {
+        e.preventDefault();
+        var contenido = $('#setContenido').val();
+        var titulo = $('#setTitulo').val();
+        if (titulo && contenido) {
+            $('<div>')
+            .addClass('draggable')
+            .append(
+                $('<button>')
+                .html(titulo)
+                .data('data', contenido)
+                .on('click', (e)=>{
+                    alert($(e.target).data('data'));
+                })
+            )
+            .draggable()
+            .appendTo('.principal');
+            $(e.target).parent().parent().remove();
+        } else {
+            alert('Rellene el campo de "Titulo" y "Contenido" o pulse "Cancelar" para salir.');
+        }
+    }
 }
 
 /**
@@ -195,67 +171,42 @@ function setArticulo() {
             .append($('<option>').attr('value', 'h3').html('H3'))
         )
     )
-    .append(
-        $('<p>')
-        .append($('<label>').attr('for', 'setTitulo').html('Titulo: '))
-        .append(
-            $('<input>')
-            .attr({
-                id: 'setTitulo',
-                type: 'text'
-            })
-        )
-    )
-    .append(
-        $('<p>')
-        .append($('<label>').attr('for', 'setContenido').html('Contenido: '))
-        .append(
-            $('<input>')
-            .attr({
-                id: 'setContenido',
-                type: 'text'
-            })
-        )
-    )
-    .append(
-        $('<p>')
-        .append(
-            $('<input>')
-            .attr({
-                type: 'submit',
-                value: 'Confirmar',
-            })
-            .on('click', (e) => {
-                e.preventDefault();
-
-                var titulo = $('#setTitulo').val();
-                var contenido = $('#setContenido').val();
-                if (titulo || contenido) {
-                    var $div = $('<div>').addClass('draggable');
-
-                    if (titulo) {
-                        $div.append(
-                            $(`<${$('#setTamaño :selected').val()}>`)
-                            .html(titulo)
-                        );
-                    }
-
-                    if (contenido) {
-                        $div.append($('<p>').html(contenido));
-                    }
-
-                    $div.draggable().appendTo('.principal');
-
-                    $(e.target).parent().parent().remove();
-                } else {
-                    alert('Rellene el campo de "Titulo" o el de "Contenido" o pulse "Cancelar" para salir.');
-                }
-            })
-        )
-        .append(botonCancelar())
-    )
+    .append(inputTitulo())
+    .append(inputContenido())
+    .append(setBotones(click))
     .appendTo('.principal')
     .centrar();
+
+    /**
+     * Funcion que realiza la craeción del alert.
+     * @param  {Event} e Evento que ha disparado esta accion.
+     */
+    function click(e) {
+        e.preventDefault();
+
+        var titulo = $('#setTitulo').val();
+        var contenido = $('#setContenido').val();
+        if (titulo || contenido) {
+            var $div = $('<div>').addClass('draggable');
+
+            if (titulo) {
+                $div.append(
+                    $(`<${$('#setTamaño :selected').val()}>`)
+                    .html(titulo)
+                );
+            }
+
+            if (contenido) {
+                $div.append($('<p>').html(contenido));
+            }
+
+            $div.draggable().appendTo('.principal');
+
+            $(e.target).parent().parent().remove();
+        } else {
+            alert('Rellene el campo de "Titulo" o el de "Contenido" o pulse "Cancelar" para salir.');
+        }
+    }
 }
 
 /**
@@ -300,60 +251,47 @@ function setImagen() {
             })
         )
     )
-    .append(
-        $('<p>')
-        .append($('<label>').attr('for', 'setContenido').html('Pié de imagen: '))
-        .append(
-            $('<input>')
-            .attr({
-                id: 'setContenido',
-                type: 'text',
-            })
-        )
-    )
-    .append(
-        $('<p>')
-        .append(
-            $('<input>')
-            .attr({
-                type: 'submit',
-                value: 'Confirmar',
-            })
-            .on('click', (e) => {
-                e.preventDefault();
-                var $div = $('<div>').addClass('draggable');
-
-                if (src) {
-                    $div.append(
-                        $('<img>')
-                        .addClass('img-insitu')
-                        .attr('src', src)
-                    )
-                } else {
-                    $div.append(
-                        $('<img>')
-                        .addClass('img-insitu')
-                        .attr('src', 'src/photos/eduardo.png')
-                    )
-                }
-
-                if ($('#setContenido').val()) {
-                    $div.append(
-                        $('<figcaption>')
-                        .html($('#setContenido').val())
-                    )
-                }
-
-                $div
-                .draggable()
-                .appendTo('.principal');
-                $(e.target).parent().parent().remove();
-            })
-        )
-        .append(botonCancelar())
-    )
+    .append(inputContenido())
+    .append(setBotones(click))
     .appendTo('.principal')
     .centrar();
+
+    /**
+     * Funcion que realiza la craeción del alert.
+     * @param  {Event} e Evento que ha disparado esta accion.
+     */
+    function click(e) {
+        e.preventDefault();
+        var $div = $('<div>')
+        .css('width', '200px')
+        .addClass('draggable');
+        var $fig = $('<figure>').addClass('img-insitu');
+
+        if (src) {
+            $fig.append(
+                $('<img>')
+                .attr('src', src)
+            )
+        } else {
+            $fig.append(
+                $('<img>')
+                .attr('src', 'src/photos/eduardo.png')
+            )
+        }
+
+        if ($('#setContenido').val()) {
+            $fig.append(
+                $('<figcaption>')
+                .html($('#setContenido').val())
+            )
+        }
+
+        $div
+        .append($fig)
+        .draggable()
+        .appendTo('.principal');
+        $(e.target).parent().parent().remove();
+    }
 }
 
 /**
@@ -392,30 +330,25 @@ function setTabla() {
             })
         )
     )
-    .append(
-        $('<p>')
-        .append(
-            $('<input>')
-            .attr({
-                type: 'submit',
-                value: 'Confirmar',
-            })
-            .on('click', (e) => {
-                e.preventDefault();
-                var filas = $('#setFila').val();
-                var columnas = $('#setColumna').val();
-                if (filas >=1 && columnas>=1 && filas <=20 && columnas<=20) {
-                    generarTabla(filas, columnas);
-                    $(e.target).parent().parent().remove();
-                } else {
-                    alert('Introduzca ambos numeros positivos y enteros mayores que 1 y menores que 20.')
-                }
-            })
-        )
-        .append(botonCancelar())
-    )
+    .append(setBotones(click))
     .appendTo('.principal')
     .centrar();
+
+    /**
+     * Funcion que realiza la craeción del alert.
+     * @param  {Event} e Evento que ha disparado esta accion.
+     */
+    function click(e) {
+        e.preventDefault();
+        var filas = $('#setFila').val();
+        var columnas = $('#setColumna').val();
+        if (filas >=1 && columnas>=1 && filas <=20 && columnas<=20) {
+            generarTabla(filas, columnas);
+            $(e.target).parent().parent().remove();
+        } else {
+            alert('Introduzca ambos numeros positivos y enteros mayores que 1 y menores que 20.')
+        }
+    }
 
     /**
     * Genera una tabla dadas las filas y las comumnas deseadas, añade
@@ -473,3 +406,70 @@ function botonCancelar() {
         $(e.target).parent().parent().remove();
     });
 }
+
+/**
+* Boton predeterminado para cancelar un formulario.
+* Deshabilita la accion por defecto del boton y elimina el formulario.
+*/
+function setBotones(click) {
+    return $('<p>')
+    .append(
+        $('<input>')
+        .attr({
+            type: 'submit',
+            value: 'Confirmar',
+        })
+        .on('click', (e) => {
+            click(e);
+        })
+    )
+    .append(botonCancelar());
+}
+
+/**
+ * Devuelve el input encargado de recoger el titulo con su label.
+ * @return {jQuery} Parrafo con label e input de tipo text.
+ */
+function inputTitulo() {
+    return $('<p>')
+    .append(
+        $('<label>')
+        .attr('for', 'setTitulo')
+        .html('Titulo: ')
+    )
+    .append(
+        $('<input>')
+        .attr({
+            id: 'setTitulo',
+            type: 'text',
+        })
+    );
+}
+
+/**
+ * Devuelve el input encargado de recoger el contenido con su label.
+ * @return {jQuery} Parrafo con label e input de tipo text.
+ */
+function inputContenido() {
+    return $('<p>')
+    .append(
+        $('<label>')
+        .attr('for', 'setContenido')
+        .html('Contenido: ')
+    )
+    .append(
+        $('<input>')
+        .attr({
+            id: 'setContenido',
+            type: 'text',
+        })
+    );
+}
+
+/**
+ * Funcion que realiza la craeción del alert.
+ * @param  {Event} e Evento que ha disparado esta accion.
+ */
+// function click(e) {
+//
+// }
