@@ -91,11 +91,6 @@ function bienvenida() {
         )
         .draggable()
         .appendTo('body');
-
-
-        $('<div>')
-        .addClass('principal')
-        .appendTo('body');
     }, 2000);
 }
 
@@ -122,7 +117,7 @@ function setAlert(){
     .append(inputTitulo())
     .append(inputContenido())
     .append(setBotones(click))
-    .appendTo('.principal')
+    .appendTo('body')
     .centrar();
 
     /**
@@ -145,7 +140,7 @@ function setAlert(){
                 })
             )
             .draggable()
-            .appendTo('.principal');
+            .appendTo('body');
             $(e.target).parent().parent().remove();
         } else {
             alert('Rellene el campo de "Titulo" y "Contenido" o pulse "Cancelar" para salir.');
@@ -174,7 +169,7 @@ function setArticulo() {
     .append(inputTitulo())
     .append(inputContenido())
     .append(setBotones(click))
-    .appendTo('.principal')
+    .appendTo('body')
     .centrar();
 
     /**
@@ -253,7 +248,7 @@ function setImagen() {
     )
     .append(inputContenido())
     .append(setBotones(click))
-    .appendTo('.principal')
+    .appendTo('body')
     .centrar();
 
     /**
@@ -289,7 +284,7 @@ function setImagen() {
         $div
         .append($fig)
         .draggable()
-        .appendTo('.principal');
+        .appendTo('body');
         $(e.target).parent().parent().remove();
     }
 }
@@ -331,7 +326,7 @@ function setTabla() {
         )
     )
     .append(setBotones(click))
-    .appendTo('.principal')
+    .appendTo('body')
     .centrar();
 
     /**
@@ -377,7 +372,7 @@ function setTabla() {
         .addClass('draggable')
         .append($table.append($thead).append($tbody))
         .draggable()
-        .appendTo('.principal');
+        .appendTo('body');
 
         /**
         * Encargado de rellenar las celdas de la tabla cuando se hace
