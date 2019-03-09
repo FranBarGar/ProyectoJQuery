@@ -9,9 +9,6 @@ function bienvenida() {
     setTimeout(function(){
         $('<div>')
         .attr('id', 'inicio')
-        .css({
-            'background-color': '#f1f1f1',
-        })
         .addClass('bienvenida')
         .append($('<h1>').html('Proyecto JQuery DIW'))
         .append($('<h2>').html('por: Francisco Barba García'))
