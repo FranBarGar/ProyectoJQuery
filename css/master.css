@@ -2,13 +2,18 @@ body {
     margin: 0;
 }
 
+nav {
+    z-index: 10000000000;
+}
+
 nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 10%;
+    width: 150px;
     position: absolute;
     overflow: auto;
+    background-color: #f1f1f1;
 }
 
 nav li a {
@@ -58,7 +63,6 @@ table {
 }
 
 td, th {
-  border: 1px solid #ddd;
   padding: 8px;
 }
 
