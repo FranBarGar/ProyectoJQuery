@@ -16,7 +16,6 @@ function bienvenida() {
         .parpadea();
 
         $('<nav>')
-        .css('z-index', 10000000)
         .append(
             $('<img>')
             .attr({
