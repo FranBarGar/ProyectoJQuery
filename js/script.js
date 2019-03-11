@@ -1,8 +1,17 @@
-const INTIT = 'setTitulo', INCOTIT = 'setColorTitulo';
+const INTIT = 'setTitulo', INCOTIT = 'setColorTitulo', INTAM = 'setTamaño';
 const INCONT = 'setContenido', INCOCONT = 'setColorContenido';
-const INTAM = 'setTamaño', INALI = 'setAlineacion';
+const INALI = 'setAlineacion', INTILE = 'setTipoLetra';
 const INBORDER = 'setBorder', INCOBORD = 'setColorBorder', INTABORD = 'setTamañoBorder';
 const INFILA = 'setFila', INCOLUM = 'setColumna';
+const INGRAD = 'setGradient';
+const FORMGRAD = {
+    'Lineal': 'linear',
+    'Radial': 'radial'
+};
+const ORIGRAD = {
+    'Horizontal': 'to bottom',
+    'Vertical': 'to right'
+};
 const TAMANYO = {
     'H1': 'h1',
     'H2': 'h2',
@@ -14,12 +23,19 @@ const ALINE = {
     'Izquierda': 'left',
     'Derecha': 'right',
 };
+const TILE = {
+    'Arial': 'arial',
+    'Calibri': 'calibri',
+    'Courier': 'courier',
+    'Helvetica': 'helvetica',
+    'Verdana': 'verdana',
+}
 const BORDER = {
     'Sin marco': '',
     'Solido': 'solid',
     'Punteado': 'dotted',
     'Doble': 'double',
-}
+};
 
 $(function(){
     bienvenida();
@@ -100,6 +116,43 @@ function bienvenida() {
                     $('<a>')
                     .html('· Tabla')
                     .on('click', setTabla)
+                )
+            )
+            .append(
+                $('<p>')
+                .css('margin', '5px')
+                .html('Fondo: ')
+            )
+            .append(
+                $('<li>')
+                .append(
+                    $('<a>')
+                    .html('· Imagen')
+                    .on('click', setImagenFondo)
+                )
+            )
+            .append(
+                $('<li>')
+                .append(
+                    $('<a>')
+                    .html('· Un color')
+                    .on('click', setColorFondo)
+                )
+            )
+            .append(
+                $('<li>')
+                .append(
+                    $('<a>')
+                    .html('· Dos colores')
+                    .on('click', setColorFondoDos)
+                )
+            )
+            .append(
+                $('<li>')
+                .append(
+                    $('<a>')
+                    .html('· Tres colores')
+                    .on('click', setColorFondoTres)
                 )
             )
             .append(
@@ -199,9 +252,14 @@ function setArticulo() {
         .attr('class', 'pre-form')
         .append(createSelect(INTAM, TAMANYO, 'Tamaño del titulo'))
         .append(createSelect(INALI, ALINE, 'Alineación'))
+        .append(createSelect(INTILE, TILE, 'Tipo de letra'))
         .append(createInput(INTIT, 'text', 'Titulo'))
         .append(createInput(INCOTIT, 'color', 'Color del titulo'))
-        .append(createInput(INCONT, 'text', 'Contenido'))
+        .append(
+            $('<p>')
+            .append($('<label>').attr('for', INCONT).html('Contenido: '))
+            .append($('<textarea>').attr('id', INCONT))
+        )
         .append(createInput(INCOCONT, 'color', 'Color del contenido'))
         .append(createSelect(INBORDER, BORDER, 'Marco'))
         .append(createInput(INTABORD, 'number', 'Grosor del marco'))
@@ -225,6 +283,7 @@ function setArticulo() {
             var $div = divDraggable().css({
                 'max-width': '70%',
                 'text-align': $('#'+INALI).val(),
+                'font-family': $(`#${INTILE} :selected`).val(),
                 border: `${$('#'+INTABORD).val()}px ${$(`#${INBORDER} :selected`).val()} ${$(`#${INCOBORD}`).val()}`,
             });
 
@@ -304,6 +363,7 @@ function setImagen() {
             )
         )
         .append(createInput(INCONT, 'text', 'Pie de foto'))
+        .append(createSelect(INTILE, TILE, 'Tipo de letra'))
         .append(createInput(INCOCONT, 'color', 'Color del pie de foto'))
         .append(createSelect(INBORDER, BORDER, 'Marco'))
         .append(createInput(INTABORD, 'number', 'Grosor del marco'))
@@ -329,6 +389,7 @@ function setImagen() {
             $fig.append(
                 $('<img>')
                 .attr('src', src)
+                .css('width', '250px')
             )
         } else {
             $fig.append(
@@ -342,6 +403,7 @@ function setImagen() {
                 $('<figcaption>')
                 .css({
                     'white-space': 'wrap',
+                    'font-family': $(`#${INTILE} :selected`).val(),
                     color: $('#'+INCOCONT).val(),
                 })
                 .html(contenido)
@@ -369,6 +431,7 @@ function setTabla() {
         .addClass('pre-form')
         .append(createInput(INFILA, 'number', 'Numero de filas'))
         .append(createInput(INCOLUM, 'number', 'Numero de columnas'))
+        .append(createSelect(INTILE, TILE, 'Tipo de letra'))
         .append(createSelect(INBORDER, BORDER, 'Marco'))
         .append(createInput(INTABORD, 'number', 'Grosor del marco'))
         .append(createInput(INCOBORD, 'color', 'Color del marco'))
@@ -408,6 +471,7 @@ function setTabla() {
             $thead.append(
                 $('<th>')
                 .css({
+                    'font-family': $(`#${INTILE} :selected`).val(),
                     border: `${$('#'+INTABORD).val()}px ${$(`#${INBORDER} :selected`).val()} ${$(`#${INCOBORD}`).val()}`,
                 })
                 .on('click', setContenido)
@@ -420,6 +484,7 @@ function setTabla() {
                 $tr.append(
                     $('<td>')
                     .css({
+                        'font-family': $(`#${INTILE} :selected`).val(),
                         border: `${$('#'+INTABORD).val()}px ${$(`#${INBORDER} :selected`).val()} ${$(`#${INCOBORD}`).val()}`,
                     })
                     .on('click', setContenido)
@@ -442,6 +507,263 @@ function setTabla() {
             var str = prompt('Introduzca lo que desea guardar en la celda seleccionada.');
             $(e.target).html(str);
         }
+    }
+}
+
+/**
+ * Muestra un formulario que permite al usuario subir una imagen en su sistema de ficheros,
+ * si la imagen es correcta, la pone de fondo de pante.
+ */
+function setImagenFondo() {
+    var src;
+
+    if (comprobarFormulario()) {
+        $('<form>')
+        .attr('class', "pre-form")
+        .append(
+            $('<p>')
+            .append($('<label>').attr('for', 'setImagen').html('Imagen: '))
+            .append(
+                $('<input>')
+                .attr({
+                    id: 'setImagen',
+                    type: 'file',
+                    accept: 'image/x-png,image/gif,image/jpeg',
+                })
+                .on('change', (e) => {
+                    if (e.target.files && e.target.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function(e) {
+                            $('#actual').attr('src', e.target.result);
+                            src = e.target.result;
+                        }
+
+                        reader.readAsDataURL(e.target.files[0]);
+                    }
+                })
+            )
+        )
+        .append(
+            $('<p>').append(
+                $('<img>')
+                .attr({
+                    id: 'actual',
+                    class: 'img-insitu',
+                    src: 'src/photos/eduardo.png',
+                })
+            )
+        )
+        .append(inputBotones(click))
+        .append(
+            $('<input>')
+            .attr({
+                type: 'submit',
+                value: 'Quitar Imagen',
+            })
+            .on('click', (e) => {
+                e.preventDefault();
+                $('body').css('background-image', '');
+                $(e.target).parents('form').remove();
+            })
+        )
+        .appendTo('body')
+        .centrar();
+    }
+
+    /**
+     * Funcion que pone la imagen indicada de fondo.
+     * @param  {Event} e Evento que ha disparado esta accion.
+     */
+    function click(e) {
+        e.preventDefault();
+
+        if (!src) {
+            src = 'src/photos/eduardo.png'
+        }
+
+        $('body').css({
+            'background-image': 'url('+src+')',
+            'background-repeat': 'repeat',
+            height: '100%',
+            'background-size': 'cover',
+        })
+
+        $(e.target).parents('form').remove();
+    }
+}
+
+/**
+ * Pone un color de fondo a elegir por el usuario.
+ */
+function setColorFondoTres() {
+    if (comprobarFormulario()) {
+        $('<form>')
+        .attr('class', "pre-form")
+        .on('change', 'input[type=color], select', (e) => {
+            var co1 = $('#'+INCOTIT+1).val();
+            var co2 = $('#'+INCOTIT+2).val();
+            var co3 = $('#'+INCOTIT+3).val();
+            var form = $('#'+INGRAD+1+' :selected').val();
+            var ali = (form != 'radial') ? $('#'+INGRAD+2+' :selected').val()+', ' : '';
+            $('#actual').css({
+                'background-image': ''+form+'-gradient('+ali+co1+', '+co2+', '+co3+')'
+            })
+        })
+        .append(createSelect(INGRAD+1, FORMGRAD, 'Forma'))
+        .append(createSelect(INGRAD+2, ORIGRAD, 'Alineación'))
+        .append(createInput(INCOTIT+1, 'color', 'Color1 del radiante'))
+        .append(createInput(INCOTIT+2, 'color', 'Color2 del radiante'))
+        .append(createInput(INCOTIT+3, 'color', 'Color3 del radiante'))
+        .append(
+            $('<p>').append(
+                $('<div>')
+                .attr({
+                    id: 'actual',
+                })
+                .css({
+                    height: '200px',
+                    width: '200px',
+                    'background-image': 'linear-gradient(black, black, black)',
+                })
+            )
+        )
+        .append(inputBotones(click))
+        .appendTo('body')
+        .centrar();
+    }
+
+    /**
+     * Funcion que pone la imagen indicada de fondo.
+     * @param  {Event} e Evento que ha disparado esta accion.
+     */
+    function click(e) {
+        e.preventDefault();
+
+        var co1 = $('#'+INCOTIT+1).val();
+        var co2 = $('#'+INCOTIT+2).val();
+        var co3 = $('#'+INCOTIT+3).val();
+        var form = $('#'+INGRAD+1+' :selected').val();
+        var ali = (form != 'radial') ? $('#'+INGRAD+2+' :selected').val()+', ' : '';
+
+        $('body').css({
+            'background-image': ''+form+'-gradient('+ali+co1+', '+co2+', '+co3+')',
+            height: '100vh',
+            'background-size': 'cover',
+            'background-repeat': 'no-repeat',
+        })
+
+        $(e.target).parents('form').remove();
+    }
+}
+
+/**
+ * Pone un color de fondo a elegir por el usuario.
+ */
+function setColorFondoDos() {
+    if (comprobarFormulario()) {
+        $('<form>')
+        .attr('class', "pre-form")
+        .on('change', 'input[type=color], select', (e) => {
+            var co1 = $('#'+INCOTIT+1).val();
+            var co2 = $('#'+INCOTIT+2).val();
+            var form = $('#'+INGRAD+1+' :selected').val();
+            var ali = (form != 'radial') ? $('#'+INGRAD+2+' :selected').val()+', ' : '';
+            $('#actual').css({
+                'background-image': ''+form+'-gradient('+ali+co1+', '+co2+')'
+            })
+        })
+        .append(createSelect(INGRAD+1, FORMGRAD, 'Forma'))
+        .append(createSelect(INGRAD+2, ORIGRAD, 'Alineación'))
+        .append(createInput(INCOTIT+1, 'color', 'Color1 del radiante'))
+        .append(createInput(INCOTIT+2, 'color', 'Color2 del radiante'))
+        .append(
+            $('<p>').append(
+                $('<div>')
+                .attr({
+                    id: 'actual',
+                })
+                .css({
+                    height: '200px',
+                    width: '200px',
+                    'background-image': 'linear-gradient(black, black)',
+                })
+            )
+        )
+        .append(inputBotones(click))
+        .appendTo('body')
+        .centrar();
+    }
+
+    /**
+     * Funcion que pone la imagen indicada de fondo.
+     * @param  {Event} e Evento que ha disparado esta accion.
+     */
+    function click(e) {
+        e.preventDefault();
+
+        var co1 = $('#'+INCOTIT+1).val();
+        var co2 = $('#'+INCOTIT+2).val();
+        var form = $('#'+INGRAD+1+' :selected').val();
+        var ali = (form != 'radial') ? $('#'+INGRAD+2+' :selected').val()+', ' : '';
+
+        $('body').css({
+            'background-image': ''+form+'-gradient('+ali+co1+', '+co2+')',
+            height: '100vh',
+            'background-size': 'cover',
+            'background-repeat': 'no-repeat',
+        })
+
+        $(e.target).parents('form').remove();
+    }
+}
+
+/**
+ * Pone un color de fondo a elegir por el usuario.
+ */
+function setColorFondo() {
+    if (comprobarFormulario()) {
+        $('<form>')
+        .attr('class', "pre-form")
+        .on('change', 'input[type=color]', (e) => {
+            $('#actual').css({
+                'background-color': $('#'+INCOTIT).val()
+            })
+        })
+        .append(createInput(INCOTIT, 'color', 'Color1 del radiante'))
+        .append(
+            $('<p>').append(
+                $('<div>')
+                .attr({
+                    id: 'actual',
+                })
+                .css({
+                    height: '200px',
+                    width: '200px',
+                    'background-color': 'black',
+                })
+            )
+        )
+        .append(inputBotones(click))
+        .appendTo('body')
+        .centrar();
+    }
+
+    /**
+     * Funcion que pone la imagen indicada de fondo.
+     * @param  {Event} e Evento que ha disparado esta accion.
+     */
+    function click(e) {
+        e.preventDefault();
+
+        $('body').css({
+            'background-color': $('#'+INCOTIT).val(),
+            height: '100vh',
+            'background-size': 'cover',
+            'background-repeat': 'no-repeat',
+        })
+
+        $(e.target).parents('form').remove();
     }
 }
 
@@ -559,11 +881,3 @@ function comprobarFormulario() {
     }
     return true;
 }
-
-/**
- * Funcion que realiza la craeción del alert.
- * @param  {Event} e Evento que ha disparado esta accion.
- */
-// function click(e) {
-//
-// }
