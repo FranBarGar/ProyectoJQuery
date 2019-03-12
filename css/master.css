@@ -37,6 +37,8 @@ nav li a:hover {
 }
 
 .pre-form {
+    left: 250px;
+    top: 50px;
     position: absolute;
     padding: 10px 10px;
     background-color: yellow;
@@ -44,11 +46,11 @@ nav li a:hover {
 }
 
 .principal {
-    width: 85%;
     text-align: center;
     align-items: center;
+    top: 0px;
     left: 100px;
-    position: relative;
+    position: absolute;
 }
 
 .img-insitu {

@@ -1,22 +1,18 @@
+/**
+ * Constantes relacionadas con los titulos.
+ */
 const INTIT = 'setTitulo', INCOTIT = 'setColorTitulo', INTAM = 'setTamaño';
-const INCONT = 'setContenido', INCOCONT = 'setColorContenido';
-const INALI = 'setAlineacion', INTILE = 'setTipoLetra';
-const INBORDER = 'setBorder', INCOBORD = 'setColorBorder', INTABORD = 'setTamañoBorder';
-const INFILA = 'setFila', INCOLUM = 'setColumna';
-const INGRAD = 'setGradient';
-const FORMGRAD = {
-    'Lineal': 'linear',
-    'Radial': 'radial'
-};
-const ORIGRAD = {
-    'Horizontal': 'to bottom',
-    'Vertical': 'to right'
-};
 const TAMANYO = {
     'H1': 'h1',
     'H2': 'h2',
     'H3': 'h3',
 };
+
+/**
+ * Constantes relacionadas con los contenidos de formato texto.
+ */
+const INCONT = 'setContenido', INCOCONT = 'setColorContenido';
+const INALI = 'setAlineacion', INTILE = 'setTipoLetra';
 const ALINE = {
     'Justificada': 'justify',
     'Centrada': 'center',
@@ -29,12 +25,54 @@ const TILE = {
     'Courier': 'courier',
     'Helvetica': 'helvetica',
     'Verdana': 'verdana',
-}
+};
+
+/**
+ * Constantes relacionadas con los contenidos de formato texto.
+ */
+const INTILI = 'setTipoLista';
+const TILI = {
+    'Numerada': 'ol',
+    'No numerada': 'ul'
+};
+
+/**
+ * Constantes relacionadas con los formularios.
+ */
+const FORMTYP = {
+    'Texto': 'text',
+    'Numero': 'number',
+    'Fichero': 'file',
+    'Color': 'color'
+};
+
+/**
+ * Constantes relacionadas con los bordes.
+ */
+const INBORDER = 'setBorder', INCOBORD = 'setColorBorder', INTABORD = 'setTamañoBorder';
 const BORDER = {
     'Sin marco': '',
     'Solido': 'solid',
     'Punteado': 'dotted',
     'Doble': 'double',
+};
+
+/**
+ * Constantes relacionadas con las tablas.
+ */
+const INFILA = 'setFila', INCOLUM = 'setColumna';
+
+/**
+ * Constantes relacionadas con los gradiantes.
+ */
+const INGRAD = 'setGradient';
+const FORMGRAD = {
+    'Lineal': 'linear',
+    'Radial': 'radial'
+};
+const ORIGRAD = {
+    'Horizontal': 'to bottom',
+    'Vertical': 'to right'
 };
 
 $(function(){
@@ -55,6 +93,7 @@ function bienvenida() {
         .parpadea();
 
         $('<nav>')
+        .css('width', '100px')
         .append(
             $('<img>')
             .attr({
@@ -86,92 +125,34 @@ function bienvenida() {
                 .css('margin', '5px')
                 .html('Añadir: ')
             )
-            .append(
-                $('<li>')
-                .append(
-                    $('<a>')
-                    .html('· Articulo')
-                    .on('click', setArticulo)
-                )
-            )
-            .append(
-                $('<li>')
-                .append(
-                    $('<a>')
-                    .html('· Imagen')
-                    .on('click', setImagen)
-                )
-            )
-            .append(
-                $('<li>')
-                .append(
-                    $('<a>')
-                    .html('· Boton con alert')
-                    .on('click', setAlert)
-                )
-            )
-            .append(
-                $('<li>')
-                .append(
-                    $('<a>')
-                    .html('· Tabla')
-                    .on('click', setTabla)
-                )
-            )
+            .append(createOpcion('· Articulo', setArticulo))
+            .append(createOpcion('· Enlace', setEnlace))
+            .append(createOpcion('· Boton con alert', setAlert))
+            .append(createOpcion('· Lista', setLista))
+            .append(createOpcion('· Formulario', setFormulario))
+            .append(createOpcion('· Tabla', setTabla))
+            .append(createOpcion('· Imagen', setImagen))
             .append(
                 $('<p>')
                 .css('margin', '5px')
                 .html('Fondo: ')
             )
+            .append(createOpcion('· Imagen', setImagenFondo))
+            .append(createOpcion('· Un color', setColorFondo))
+            .append(createOpcion('· Dos colores', setColorFondoDos))
+            .append(createOpcion('· Tres colores', setColorFondoTres))
             .append(
-                $('<li>')
-                .append(
-                    $('<a>')
-                    .html('· Imagen')
-                    .on('click', setImagenFondo)
-                )
-            )
-            .append(
-                $('<li>')
-                .append(
-                    $('<a>')
-                    .html('· Un color')
-                    .on('click', setColorFondo)
-                )
-            )
-            .append(
-                $('<li>')
-                .append(
-                    $('<a>')
-                    .html('· Dos colores')
-                    .on('click', setColorFondoDos)
-                )
-            )
-            .append(
-                $('<li>')
-                .append(
-                    $('<a>')
-                    .html('· Tres colores')
-                    .on('click', setColorFondoTres)
-                )
-            )
-            .append(
-                $('<li>')
-                .append(
-                    $('<a>')
-                    .html('Terminar')
-                    .on('click', (e) => {
-                        if ($('.principal').children().length > 0) {
-                            $('nav').css('visibility','hidden');
-                            $('table *').off();
-                            $( ".draggable" ).draggable( "destroy" );
-                            $('.diseño').remove();
-                            $('.pre-form').remove();
-                        } else {
-                            alert('Para terminar e ir a la vista final debes introducir al menos un elemento.');
-                        }
-                    })
-                )
+                createOpcion('Terminar', (e) => {
+                    if ($('.principal').children().length > 0) {
+                        $('nav').remove();
+                        $('.diseño').remove();
+                        $('.pre-form').remove();
+                        $('table *').off();
+                        $( ".draggable" ).draggable( "destroy" );
+                    } else {
+                        alert('Para terminar e ir a la vista final debes introducir al menos un elemento.');
+                    }
+                })
             )
         )
         .draggable()
@@ -187,65 +168,23 @@ function bienvenida() {
 function desplegable() {
     if ($(this).attr("src")=="src/abierto.png") {
         $(this).attr("src", "src/cerrado.jpg");
-        $('#nav').css("display", "none");
+        $('#nav').hide();
+        $('.diseño').hide();
+        $('.pre-form').hide();
         $( ".draggable" ).draggable( "disable" );
-        $('.diseño').css('display', 'none');
-        $('.pre-form').css("display", "none");
     } else {
         $(this).attr("src", "src/abierto.png");
-        $('#nav').css("display", "block");
+        $('#nav').show();
+        $('.diseño').show();
+        $('.pre-form').show();
         $( ".draggable" ).draggable( "enable" );
-        $('.diseño').css('display', 'block');
-        $('.pre-form').css("display", "block");
     }
 }
 
 /**
- * Muestra un formulario que pide el titulo del boton y
- * el contenido del alert, no pudiendo dejar vacio ninguno de los dos.
- */
-function setAlert(){
-    if (comprobarFormulario()) {
-        $('<form>')
-        .addClass('pre-form')
-        .append(createInput(INTIT, 'text', 'Titulo del boton'))
-        .append(createInput(INCONT, 'text', 'Contenido del alert'))
-        .append(inputBotones(click))
-        .appendTo('body')
-        .centrar();
-    }
-
-    /**
-     * Funcion que realiza la craeción del alert.
-     * @param  {Event} e Evento que ha disparado esta accion.
-     */
-    function click(e) {
-        e.preventDefault();
-        var contenido = $('#'+INCONT).val();
-        var titulo = $('#'+INTIT).val();
-        if (titulo && contenido) {
-            divDraggable()
-            .append(
-                $('<button>')
-                .html(titulo)
-                .data('data', contenido)
-                .on('click', (e)=>{
-                    alert($(e.target).data('data'));
-                })
-            )
-            .append(botonEliminar())
-            .appendTo('.principal');
-            $(e.target).parents('form').remove();
-        } else {
-            alert('Rellene el campo de "Titulo" y "Contenido" o pulse "Cancelar" para salir.');
-        }
-    }
-}
-
-/**
- * Muestra un formulario que pide el tamaño del titulo, el titulo en sí y
- * el contenido del articulo, pudiendo dejar vacio uno de los dos.
- */
+* Muestra un formulario que pide el tamaño del titulo, el titulo en sí y
+* el contenido del articulo, pudiendo dejar vacio uno de los dos.
+*/
 function setArticulo() {
     if (comprobarFormulario()) {
         $('<form>')
@@ -265,14 +204,13 @@ function setArticulo() {
         .append(createInput(INTABORD, 'number', 'Grosor del marco'))
         .append(createInput(INCOBORD, 'color', 'Color del marco'))
         .append(inputBotones(click))
-        .appendTo('body')
-        .centrar();
+        .appendTo('body');
     }
 
     /**
-     * Funcion que realiza la craeción del alert.
-     * @param  {Event} e Evento que ha disparado esta accion.
-     */
+    * Funcion que realiza la craeción del alert.
+    * @param  {Event} e Evento que ha disparado esta accion.
+    */
     function click(e) {
         e.preventDefault();
 
@@ -314,6 +252,313 @@ function setArticulo() {
             $(e.target).parents('form').remove();
         } else {
             alert('Rellene el campo de "Titulo" o el de "Contenido" o pulse "Cancelar" para salir.');
+        }
+    }
+}
+
+/**
+* Muestra un formulario que pide el titulo del enlace y el enlace
+*/
+function setEnlace() {
+    if (comprobarFormulario()) {
+        $('<form>')
+        .attr('class', 'pre-form')
+        .append(createInput(INTIT, 'text', 'Titulo'))
+        .append(createSelect(INTILE, TILE, 'Tipo de letra'))
+        .append(createInput(INCOTIT, 'color', 'Color del titulo'))
+        .append(createInput(INCONT, 'text', 'Contenido'))
+        .append(inputBotones(click))
+        .appendTo('body');
+    }
+
+    /**
+     * Funcion que realiza la craeción del alert.
+     * @param  {Event} e Evento que ha disparado esta accion.
+     */
+    function click(e) {
+        e.preventDefault();
+
+        var titulo = $('#'+INTIT).val();
+        var contenido = $('#'+INCONT).val();
+
+        if (titulo && contenido) {
+            divDraggable()
+            .append(
+                $(`<a>`)
+                .attr({
+                    href: contenido,
+                    target: '_blank'
+                })
+                .css({
+                    color: $('#'+INCOTIT).val(),
+                    'font-family': $(`#${INTILE} :selected`).val(),
+                })
+                .html(titulo)
+            )
+            .append(botonEliminar())
+            .appendTo('.principal');
+
+            $(e.target).parents('form').remove();
+        } else {
+            alert('Rellene el campo de "Titulo" o el de "Contenido" o pulse "Cancelar" para salir.');
+        }
+    }
+}
+
+/**
+ * Muestra un formulario que pide el titulo del boton y
+ * el contenido del alert, no pudiendo dejar vacio ninguno de los dos.
+ */
+function setAlert(){
+    if (comprobarFormulario()) {
+        $('<form>')
+        .addClass('pre-form')
+        .append(createInput(INTIT, 'text', 'Titulo del boton'))
+        .append(createInput(INCONT, 'text', 'Contenido del alert'))
+        .append(inputBotones(click))
+        .appendTo('body');
+    }
+
+    /**
+     * Funcion que realiza la craeción del alert.
+     * @param  {Event} e Evento que ha disparado esta accion.
+     */
+    function click(e) {
+        e.preventDefault();
+        var contenido = $('#'+INCONT).val();
+        var titulo = $('#'+INTIT).val();
+        if (titulo && contenido) {
+            divDraggable()
+            .append(
+                $('<button>')
+                .html(titulo)
+                .data('data', contenido)
+                .on('click', (e)=>{
+                    alert($(e.target).data('data'));
+                })
+            )
+            .append(botonEliminar())
+            .appendTo('.principal');
+            $(e.target).parents('form').remove();
+        } else {
+            alert('Rellene el campo de "Titulo" y "Contenido" o pulse "Cancelar" para salir.');
+        }
+    }
+}
+
+/**
+* Muestra un formulario que pide al usuario el tipo de lista y la añade.
+*/
+function setLista() {
+    if (comprobarFormulario()) {
+        $('<form>')
+        .addClass('pre-form')
+        .append(createSelect(INTILI, TILI, 'Tipo de lista'))
+        .append(createSelect(INTILE, TILE, 'Tipo de letra'))
+        .append(inputBotones(click))
+        .appendTo('body');
+    }
+
+    /**
+    * Funcion que realiza la craeción de la lista.
+    * @param  {Event} e Evento que ha disparado esta accion.
+    */
+    function click(e) {
+        e.preventDefault();
+
+        var tipo = $(`#${INTILI} :selected`).val();
+        divDraggable()
+        .css({
+            'text-align': 'left',
+            'max-width': '70%',
+            'font-family': $(`#${INTILE} :selected`).val(),
+        })
+        .append($(`<${tipo}>`))
+        .append($('<input>').attr('type', 'text').addClass('diseño'))
+        .append(
+            $('<input>')
+            .attr({
+                type: 'submit',
+                value: 'Añadir'
+            })
+            .addClass('diseño')
+            .on('click', {tipo: tipo}, (e) => {
+                e.preventDefault();
+
+                var $text = $(e.target).siblings('input');
+                $(e.target).siblings(tipo).append($('<li>').html($text.val()));
+                $text.val('');
+            })
+        )
+        .append(botonEliminar())
+        .appendTo('.principal');
+
+        $(e.target).parents('form').remove();
+
+    }
+}
+
+/**
+* Muestra un formulario que pide al usuario el tipo de lista y la añade.
+*/
+function setFormulario() {
+    if (comprobarFormulario()) {
+        $('<form>')
+        .addClass('pre-form')
+        .append(createSelect(INTILE, TILE, 'Tipo de letra'))
+        .append(createInput(INCOCONT, 'color', 'Color del contenido'))
+        .append(createSelect(INBORDER, BORDER, 'Marco'))
+        .append(createInput(INTABORD, 'number', 'Grosor del marco'))
+        .append(createInput(INCOBORD, 'color', 'Color del marco'))
+        .append(inputBotones(click))
+        .appendTo('body');
+    }
+
+    /**
+    * Funcion que realiza la craeción de la lista.
+    * @param  {Event} e Evento que ha disparado esta accion.
+    */
+    function click(e) {
+        e.preventDefault();
+
+        divDraggable()
+        .css({
+            'text-align': 'left',
+            'width': '400px',
+            'font-family': $(`#${INTILE} :selected`).val(),
+        })
+        .append(
+            $(`<form>`)
+            .css({
+                color: $('#'+INCOCONT).val(),
+                border: `${$('#'+INTABORD).val()}px ${$(`#${INBORDER} :selected`).val()} ${$(`#${INCOBORD}`).val()}`,
+            })
+            .append($('<button>').html('Enviar'))
+            .append($('<button>').html('Cancelar'))
+            .on('submit', (e) => {
+                e.preventDefault();
+            })
+        )
+        .append(
+            $('<span>')
+            .addClass('diseño')
+            .html('Etiqueta: ')
+            .append($('<input>').attr('type', 'text'))
+            .append(createSelect('', FORMTYP, 'Tipo'))
+            .append(
+                $('<input>')
+                .attr({
+                    type: 'submit',
+                    value: 'Añadir'
+                })
+                .on('click', (e) => {
+                    e.preventDefault();
+
+                    var $select = $(e.target).siblings('p').find('select :selected');
+                    var $text = $(e.target).siblings('input');
+                    $(e.target)
+                    .parent()
+                    .siblings('form')
+                    .prepend(createInput('', $select.val(), $text.val()));
+                    $text.val('');
+                })
+            )
+        )
+        .append(botonEliminar())
+        .appendTo('.principal');
+
+        $(e.target).parents('form').remove();
+
+    }
+}
+
+/**
+* Muestra un formulario que pide al usuario las dimensiones de la tabla,
+* si son correctas, pinta una tabla vacia que se puede rellenar haciendo
+* click en alguna de sus celdas.
+* En caso de error se le pide al usuarios que vuelva a ingresas los parametros
+* de la tabla o cancele la operación.
+*/
+function setTabla() {
+    if (comprobarFormulario()) {
+        $('<form>')
+        .addClass('pre-form')
+        .append(createInput(INFILA, 'number', 'Numero de filas'))
+        .append(createInput(INCOLUM, 'number', 'Numero de columnas'))
+        .append(createSelect(INTILE, TILE, 'Tipo de letra'))
+        .append(createSelect(INBORDER, BORDER, 'Marco'))
+        .append(createInput(INTABORD, 'number', 'Grosor del marco'))
+        .append(createInput(INCOBORD, 'color', 'Color del marco'))
+        .append(inputBotones(click))
+        .appendTo('body');
+    }
+
+    /**
+    * Funcion que realiza la craeción del alert.
+    * @param  {Event} e Evento que ha disparado esta accion.
+    */
+    function click(e) {
+        e.preventDefault();
+        var filas = $('#'+INFILA).val();
+        var columnas = $('#'+INCOLUM).val();
+        if (filas >=1 && columnas>=1 && filas <=20 && columnas<=20) {
+            generarTabla(filas, columnas);
+            $(e.target).parents('form').remove();
+        } else {
+            alert('Introduzca ambos numeros positivos y enteros mayores que 1 y menores que 20.')
+        }
+    }
+
+    /**
+    * Genera una tabla dadas las filas y las comumnas deseadas, añade
+    * dicha tabla a .principal tras generarla.
+    * @param  {int} filas    Numero de filas que tiene la tabla.
+    * @param  {int} columnas Numero de columnas que tiene la tabla
+    */
+    function generarTabla(filas, columnas) {
+        var $table = $('<table>');
+        var $thead = $('<thead>');
+        var $tbody = $('<tbody>');
+
+        for (let i = 0; i < columnas; i++) {
+            $thead.append(
+                $('<th>')
+                .css({
+                    'font-family': $(`#${INTILE} :selected`).val(),
+                    border: `${$('#'+INTABORD).val()}px ${$(`#${INBORDER} :selected`).val()} ${$(`#${INCOBORD}`).val()}`,
+                })
+                .on('click', setContenido)
+            );
+        }
+
+        for (let i = 0; i < filas-1; i++) {
+            var $tr = $('<tr>');
+            for (let i = 0; i < columnas; i++) {
+                $tr.append(
+                    $('<td>')
+                    .css({
+                        'font-family': $(`#${INTILE} :selected`).val(),
+                        border: `${$('#'+INTABORD).val()}px ${$(`#${INBORDER} :selected`).val()} ${$(`#${INCOBORD}`).val()}`,
+                    })
+                    .on('dblclick', setContenido)
+                );
+            }
+            $tbody.append($tr);
+        }
+
+        divDraggable()
+        .append($table.append($thead).append($tbody))
+        .append(botonEliminar())
+        .appendTo('.principal');
+
+        /**
+        * Encargado de rellenar las celdas de la tabla cuando se hace
+        * click en ellas.
+        * @param {Event} e Evento que dispara este metodo.
+        */
+        function setContenido(e) {
+            var str = prompt('Introduzca lo que desea guardar en la celda seleccionada.');
+            $(e.target).html(str);
         }
     }
 }
@@ -369,8 +614,7 @@ function setImagen() {
         .append(createInput(INTABORD, 'number', 'Grosor del marco'))
         .append(createInput(INCOBORD, 'color', 'Color del marco'))
         .append(inputBotones(click))
-        .appendTo('body')
-        .centrar();
+        .appendTo('body');
     }
 
     /**
@@ -415,98 +659,6 @@ function setImagen() {
         .append(botonEliminar())
         .appendTo('.principal');
         $(e.target).parents('form').remove();
-    }
-}
-
-/**
-* Muestra un formulario que pide al usuario las dimensiones de la tabla,
-* si son correctas, pinta una tabla vacia que se puede rellenar haciendo
-* click en alguna de sus celdas.
-* En caso de error se le pide al usuarios que vuelva a ingresas los parametros
-* de la tabla o cancele la operación.
-*/
-function setTabla() {
-    if (comprobarFormulario()) {
-        $('<form>')
-        .addClass('pre-form')
-        .append(createInput(INFILA, 'number', 'Numero de filas'))
-        .append(createInput(INCOLUM, 'number', 'Numero de columnas'))
-        .append(createSelect(INTILE, TILE, 'Tipo de letra'))
-        .append(createSelect(INBORDER, BORDER, 'Marco'))
-        .append(createInput(INTABORD, 'number', 'Grosor del marco'))
-        .append(createInput(INCOBORD, 'color', 'Color del marco'))
-        .append(inputBotones(click))
-        .appendTo('body')
-        .centrar();
-    }
-
-    /**
-     * Funcion que realiza la craeción del alert.
-     * @param  {Event} e Evento que ha disparado esta accion.
-     */
-    function click(e) {
-        e.preventDefault();
-        var filas = $('#'+INFILA).val();
-        var columnas = $('#'+INCOLUM).val();
-        if (filas >=1 && columnas>=1 && filas <=20 && columnas<=20) {
-            generarTabla(filas, columnas);
-            $(e.target).parents('form').remove();
-        } else {
-            alert('Introduzca ambos numeros positivos y enteros mayores que 1 y menores que 20.')
-        }
-    }
-
-    /**
-    * Genera una tabla dadas las filas y las comumnas deseadas, añade
-    * dicha tabla a .principal tras generarla.
-    * @param  {int} filas    Numero de filas que tiene la tabla.
-    * @param  {int} columnas Numero de columnas que tiene la tabla
-    */
-    function generarTabla(filas, columnas) {
-        var $table = $('<table>');
-        var $thead = $('<thead>');
-        var $tbody = $('<tbody>');
-
-        for (let i = 0; i < columnas; i++) {
-            $thead.append(
-                $('<th>')
-                .css({
-                    'font-family': $(`#${INTILE} :selected`).val(),
-                    border: `${$('#'+INTABORD).val()}px ${$(`#${INBORDER} :selected`).val()} ${$(`#${INCOBORD}`).val()}`,
-                })
-                .on('click', setContenido)
-            );
-        }
-
-        for (let i = 0; i < filas-1; i++) {
-            var $tr = $('<tr>');
-            for (let i = 0; i < columnas; i++) {
-                $tr.append(
-                    $('<td>')
-                    .css({
-                        'font-family': $(`#${INTILE} :selected`).val(),
-                        border: `${$('#'+INTABORD).val()}px ${$(`#${INBORDER} :selected`).val()} ${$(`#${INCOBORD}`).val()}`,
-                    })
-                    .on('click', setContenido)
-                );
-            }
-            $tbody.append($tr);
-        }
-
-        divDraggable()
-        .append($table.append($thead).append($tbody))
-        .append(botonEliminar())
-        .appendTo('.principal');
-
-        /**
-        * Encargado de rellenar las celdas de la tabla cuando se hace
-        * click en ellas.
-        * @param {Event} e Evento que dispara este metodo.
-        */
-        function setContenido(e) {
-            var str = prompt('Introduzca lo que desea guardar en la celda seleccionada.');
-            $(e.target).html(str);
-        }
     }
 }
 
@@ -567,8 +719,7 @@ function setImagenFondo() {
                 $(e.target).parents('form').remove();
             })
         )
-        .appendTo('body')
-        .centrar();
+        .appendTo('body');
     }
 
     /**
@@ -629,8 +780,7 @@ function setColorFondoTres() {
             )
         )
         .append(inputBotones(click))
-        .appendTo('body')
-        .centrar();
+        .appendTo('body');
     }
 
     /**
@@ -691,8 +841,7 @@ function setColorFondoDos() {
             )
         )
         .append(inputBotones(click))
-        .appendTo('body')
-        .centrar();
+        .appendTo('body');
     }
 
     /**
@@ -730,7 +879,7 @@ function setColorFondo() {
                 'background-color': $('#'+INCOTIT).val()
             })
         })
-        .append(createInput(INCOTIT, 'color', 'Color1 del radiante'))
+        .append(createInput(INCOTIT, 'color', 'Color del fondo'))
         .append(
             $('<p>').append(
                 $('<div>')
@@ -745,8 +894,7 @@ function setColorFondo() {
             )
         )
         .append(inputBotones(click))
-        .appendTo('body')
-        .centrar();
+        .appendTo('body');
     }
 
     /**
@@ -862,12 +1010,35 @@ function createSelect(id, array, texto) {
 }
 
 /**
+ * Crea una opcion de la barra de navegación.
+ * @param  {string}   texto    Texto descriptivo de la opcion de la barra de navegación.
+ * @param  {Function} callback Funcion ligada a la opción.
+ * @return {JQuery}            Opción ya creada.
+ */
+function createOpcion(texto, callback) {
+    return $('<li>')
+        .append(
+            $('<a>')
+            .html(texto)
+            .on('click', callback)
+        );
+}
+
+/**
  * Creacion de divs dragables con la clase draggable para
  * evitar repetir codigo.
  * @return {JQuery} Div draggable.
  */
 function divDraggable() {
-    return $('<div>').addClass('draggable').draggable();
+    return $('<div>')
+    .addClass('draggable')
+    .css({
+        position: 'absolute',
+        top: '50px',
+        left: '200px',
+        'min-width': '100px'
+    })
+    .draggable();
 }
 
 /**
